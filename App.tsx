@@ -1076,15 +1076,14 @@ interface MapViewProps {
 }
 
 const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, schedule }) => {
-    // IMPORTANT: Replace this with your actual Google Maps API key
-    // FIX: Set the placeholder key to match the check below, ensuring the user sees the instruction message.
-    let GOOGLE_MAPS_API_KEY = "COLE_SUA_CHAVE_DA_API_DO_GOOGLE_MAPS_AQUI";
+    // This key is now read from environment variables for security.
+    const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
     const [selectedBargeId, setSelectedBargeId] = useState<string | null>(null);
 
     const googleMapsUrl = useMemo(() => {
-        if (!GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === "COLE_SUA_CHAVE_DA_API_DO_GOOGLE_MAPS_AQUI") {
-            return "about:blank"; // Or show an error
+        if (!GOOGLE_MAPS_API_KEY) {
+            return "about:blank";
         }
         const baseUrl = 'https://www.google.com/maps/embed/v1/';
         
@@ -1140,11 +1139,11 @@ const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, sched
       );
     }
     
-    if (GOOGLE_MAPS_API_KEY === "COLE_SUA_CHAVE_DA_API_DO_GOOGLE_MAPS_AQUI") {
+    if (!GOOGLE_MAPS_API_KEY) {
       return (
         <Card title="Visualização no Mapa" icon={<MapIcon className="w-7 h-7 text-yellow-400" />}>
            <div className="flex items-center justify-center h-full text-center text-yellow-300 p-4">
-             <p>Para habilitar o mapa, obtenha uma chave da API do Google Maps e cole-a na variável `GOOGLE_MAPS_API_KEY` em `App.tsx`.</p>
+             <p>Para habilitar o mapa, adicione a variável de ambiente `GOOGLE_MAPS_API_KEY` nas configurações de deploy do seu projeto (ex: Vercel).</p>
            </div>
         </Card>
       )
