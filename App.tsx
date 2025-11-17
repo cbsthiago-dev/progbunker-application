@@ -1041,7 +1041,7 @@ const LocationSetup: React.FC<LocationSetupProps> = ({ locations, setLocations }
                                 {location.name === 'TERMINAL' && (
                                     <div className="relative group">
                                         <InfoIcon className="w-4 h-4 text-yellow-400 cursor-help" />
-                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-xs p-2 text-xs text-white bg-gray-800 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-xs p-2 text-xs text-white bg-gray-800 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
                                             Para a localidade TERMINAL, indicar as coordenadas do Píer de Barcaças.
                                         </div>
                                     </div>
