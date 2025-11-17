@@ -1,0 +1,5 @@
+{
+  "name": "Programação de Abastecimentos",
+  "description": "Uma aplicação inteligente para programar operações de abastecimento de navios usando uma frota de balsas. Os usuários podem definir sua frota de balsas, inserir solicitações de abastecimento e usar a IA para gerar um cronograma de serviço otimizado.",
+  "requestFramePermissions": []
+}
