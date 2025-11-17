@@ -311,6 +311,19 @@ interface RequestsTableProps {
   locations: Location[];
 }
 
+// FIX: Define a type for column widths for type safety in resizing logic
+type RequestColWidths = {
+    shipName: number;
+    location: number;
+    vlsfo: number;
+    mgo: number;
+    windowStart: number;
+    windowEnd: number;
+    contractDate: number;
+    status: number;
+    actions: number;
+};
+
 const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, locations }) => {
     const serviceableLocations = useMemo(() => locations.filter(l => l.name.toUpperCase() !== 'TERMINAL'), [locations]);
     const today = new Date().toISOString().split('T')[0];
@@ -320,7 +333,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
     const [editingRequestId, setEditingRequestId] = useState<string | null>(null);
     const [editedRequest, setEditedRequest] = useState<RefuelingRequest | null>(null);
 
-    const [colWidths, setColWidths] = useState({
+    const [colWidths, setColWidths] = useState<RequestColWidths>({
         shipName: 200,
         location: 150,
         vlsfo: 80,
@@ -331,11 +344,11 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
         status: 120,
         actions: 100,
     });
-    const resizingColKey = useRef<string | null>(null);
+    const resizingColKey = useRef<keyof RequestColWidths | null>(null);
     const startX = useRef(0);
     const tableRef = useRef<HTMLTableElement>(null);
 
-    const handleMouseDown = useCallback((e: React.MouseEvent, colKey: string) => {
+    const handleMouseDown = useCallback((e: React.MouseEvent, colKey: keyof RequestColWidths) => {
         resizingColKey.current = colKey;
         startX.current = e.clientX;
         
@@ -345,6 +358,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
             const deltaX = currentX - startX.current;
             
             setColWidths(prevWidths => {
+                if (!resizingColKey.current) return prevWidths;
                 const newWidth = (prevWidths[resizingColKey.current] || 0) + deltaX;
                 return {
                     ...prevWidths,
@@ -374,7 +388,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
         { key: 'contractDate', label: 'Data Contratual' },
         { key: 'status', label: 'Status' },
         { key: 'actions', label: 'Ações' },
-    ], []);
+    ] as const, []);
 
     useEffect(() => {
       if (!serviceableLocations.some(l => l.id === newRequest.locationId)) {
@@ -569,6 +583,20 @@ interface ScheduleViewProps {
   isLoading: boolean;
   requests: RefuelingRequest[];
 }
+
+// FIX: Define a type for schedule column widths for type safety in resizing logic
+type ScheduleColWidths = {
+    shipName: number;
+    locationName: number;
+    product: number;
+    quantity: number;
+    bargeName: number;
+    scheduledTime: number;
+    windowStart: number;
+    windowEnd: number;
+    contractualDate: number;
+};
+
 const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, requests }) => {
     const [viewMode, setViewMode] = useState<'list' | 'kanban' | 'table'>('list');
 
@@ -599,7 +627,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
             });
     }, [schedule, requests, viewMode]);
 
-    const [scheduleColWidths, setScheduleColWidths] = useState({
+    const [scheduleColWidths, setScheduleColWidths] = useState<ScheduleColWidths>({
         shipName: 180,
         locationName: 150,
         product: 100,
@@ -610,11 +638,11 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
         windowEnd: 180,
         contractualDate: 150,
     });
-    const resizingScheduleColKey = useRef<string | null>(null);
+    const resizingScheduleColKey = useRef<keyof ScheduleColWidths | null>(null);
     const startScheduleX = useRef(0);
     const scheduleTableRef = useRef<HTMLTableElement>(null);
     
-    const handleScheduleMouseDown = useCallback((e: React.MouseEvent, colKey: string) => {
+    const handleScheduleMouseDown = useCallback((e: React.MouseEvent, colKey: keyof ScheduleColWidths) => {
         resizingScheduleColKey.current = colKey;
         startScheduleX.current = e.clientX;
 
@@ -623,6 +651,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
              const currentX = event.clientX;
              const deltaX = currentX - startScheduleX.current;
              setScheduleColWidths(prevWidths => {
+                 if (!resizingScheduleColKey.current) return prevWidths;
                  const newWidth = (prevWidths[resizingScheduleColKey.current] || 0) + deltaX;
                  return { ...prevWidths, [resizingScheduleColKey.current]: Math.max(newWidth, 50) };
              });
@@ -648,7 +677,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
         { key: 'windowStart', label: 'Início da Janela' },
         { key: 'windowEnd', label: 'Fim da Janela' },
         { key: 'contractualDate', label: 'Data Contratual' },
-    ], []);
+    ] as const, []);
 
 
     const renderScheduleItem = (item: ScheduleItem, index: number, view: 'list' | 'kanban') => {
@@ -1048,8 +1077,8 @@ interface MapViewProps {
 
 const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, schedule }) => {
     // IMPORTANT: Replace this with your actual Google Maps API key
-    // FIX: Changed from const to let to allow comparison with a placeholder string without TypeScript error.
-    let GOOGLE_MAPS_API_KEY = "AIzaSyAW7-p7mYuPf1tlpsigExuOeU3Fw8M0mjQ";
+    // FIX: Set the placeholder key to match the check below, ensuring the user sees the instruction message.
+    let GOOGLE_MAPS_API_KEY = "COLE_SUA_CHAVE_DA_API_DO_GOOGLE_MAPS_AQUI";
 
     const [selectedBargeId, setSelectedBargeId] = useState<string | null>(null);
 
