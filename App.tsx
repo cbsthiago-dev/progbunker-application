@@ -1,3 +1,4 @@
+
 // FIX: Corrected the import statement for React and its hooks.
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import type { Barge, RefuelingRequest, ScheduleItem, BargeState, ProductDetail, BargeProduct, BargeVolume, OperationHistoryItem, Priority, Location } from './types';
@@ -1199,7 +1200,7 @@ interface TabButtonProps {
 const TabButton: React.FC<TabButtonProps> = ({ isActive, onClick, children }) => (
     <button
         onClick={onClick}
-        className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors duration-300 focus:outline-none ${
+        className={`px-4 py-2 text-base font-semibold rounded-t-lg transition-colors duration-300 focus:outline-none ${
             isActive
                 ? 'bg-black/10 border-b-2 border-yellow-500 text-yellow-400'
                 : 'text-gray-300 hover:text-white'
@@ -1540,7 +1541,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-800 via-green-950 to-black text-white font-sans p-4 sm:p-6 lg:p-8 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-teal-800 via-teal-950 to-black text-white font-sans p-4 sm:p-6 lg:p-8 flex flex-col">
       <div className="max-w-7xl mx-auto w-full flex flex-col flex-grow">
         <header className="text-center mb-6 flex-shrink-0">
           <ProgbunkerLogo />
