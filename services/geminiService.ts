@@ -1,14 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import type { RefuelingRequest, ScheduleItem, Priority, Location } from '../types';
 
-const API_key = process.env.API_KEY;
-
-if (!API_key) {
-  throw new Error("API_KEY environment variable not set");
-}
-
-const ai = new GoogleGenAI({ apiKey: API_key });
-
 // This interface defines the complete barge data structure required for the prompt.
 export interface BargeForPrompt {
   id: string;
@@ -67,6 +59,15 @@ const scheduleSchema = {
 };
 
 export const generateSchedule = async (barges: BargeForPrompt[], requests: RequestForPrompt[], priorities: Priority[], simulationStartTime: string): Promise<ScheduleItem[]> => {
+  const API_key = process.env.API_KEY;
+
+  if (!API_key) {
+    console.error("API_KEY environment variable not set");
+    throw new Error("A chave da API do Gemini não foi configurada. Por favor, adicione a variável de ambiente API_KEY nas configurações de deploy do seu projeto na Vercel.");
+  }
+
+  const ai = new GoogleGenAI({ apiKey: API_key });
+  
   if (barges.length === 0 || requests.length === 0) {
     return [];
   }
