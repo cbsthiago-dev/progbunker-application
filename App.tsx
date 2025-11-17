@@ -1077,7 +1077,7 @@ interface MapViewProps {
 
 const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, schedule }) => {
     // This key is now read from environment variables for security.
-    const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
     const [selectedBargeId, setSelectedBargeId] = useState<string | null>(null);
 
@@ -1144,7 +1144,7 @@ const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, sched
         <Card title="Visualização no Mapa" icon={<MapIcon className="w-7 h-7 text-amber-400" />}>
            <div className="flex items-center justify-center h-full text-center text-amber-300 p-4">
              <p className="font-bold">CONFIGURAÇÃO NECESSÁRIA:</p>
-             <p className="text-sm mt-2">A variável de ambiente 'NEXT_PUBLIC_GOOGLE_MAPS_API_KEY' não foi encontrada. Para corrigir: 1) Acesse as configurações do seu projeto na Vercel. 2) Adicione uma Environment Variable com este nome exato e cole sua chave da API do Google Maps. 3) Faça o REDEPLOY da aplicação para que a mudança tenha efeito.</p>
+             <p className="text-sm mt-2">A variável de ambiente 'GOOGLE_MAPS_API_KEY' não foi encontrada. PARA CORRIGIR: 1) Acesse as configurações do seu projeto na Vercel. 2) Adicione uma Environment Variable com o nome exato 'GOOGLE_MAPS_API_KEY'. 3) CERTIFIQUE-SE DE MARCAR TODAS AS CAIXAS de ambiente (Production, Preview, Development). 4) Faça o REDEPLOY da aplicação.</p>
            </div>
         </Card>
       )

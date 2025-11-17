@@ -59,11 +59,11 @@ const scheduleSchema = {
 };
 
 export const generateSchedule = async (barges: BargeForPrompt[], requests: RequestForPrompt[], priorities: Priority[], simulationStartTime: string): Promise<ScheduleItem[]> => {
-  const API_key = process.env.NEXT_PUBLIC_API_KEY;
+  const API_key = process.env.API_KEY;
 
   if (!API_key) {
-    console.error("NEXT_PUBLIC_API_KEY environment variable not set");
-    throw new Error("CONFIGURAÇÃO NECESSÁRIA: A variável de ambiente 'NEXT_PUBLIC_API_KEY' não foi encontrada. Para corrigir: 1) Acesse as configurações do seu projeto na Vercel. 2) Adicione uma Environment Variable com este nome exato e cole sua chave da API do Gemini. 3) Faça o REDEPLOY da aplicação para que a mudança tenha efeito.");
+    console.error("API_KEY environment variable not set");
+    throw new Error("CONFIGURAÇÃO NECESSÁRIA: A variável de ambiente 'API_KEY' não foi encontrada. PARA CORRIGIR: 1) Acesse as configurações do seu projeto na Vercel. 2) Adicione uma Environment Variable com o nome exato 'API_KEY'. 3) CERTIFIQUE-SE DE MARCAR TODAS AS CAIXAS de ambiente (Production, Preview, Development). 4) Faça o REDEPLOY da aplicação.");
   }
 
   const ai = new GoogleGenAI({ apiKey: API_key });
