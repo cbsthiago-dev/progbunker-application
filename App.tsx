@@ -1,4 +1,3 @@
-
 // FIX: Corrected the import statement for React and its hooks.
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import type { Barge, RefuelingRequest, ScheduleItem, BargeState, ProductDetail, BargeProduct, BargeVolume, OperationHistoryItem, Priority, Location } from './types';
@@ -51,7 +50,7 @@ const Card: React.FC<CardProps> = ({ children, className, title, icon }) => (
   <div className={`bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-6 flex flex-col h-full ${className}`}>
     <div className="flex items-center gap-3 mb-4 flex-shrink-0">
       {icon}
-      <h2 className="text-xl font-bold text-yellow-400">{title}</h2>
+      <h2 className="text-xl font-bold text-amber-400">{title}</h2>
     </div>
     <div className="flex-grow overflow-hidden">
         {children}
@@ -143,28 +142,28 @@ const BargeSetup: React.FC<BargeSetupProps> = ({ barges, setBarges, setBargeStat
   };
   
   return (
-    <Card title="Frota de Barcaças" icon={<FuelIcon className="w-7 h-7 text-yellow-400" />}>
+    <Card title="Frota de Barcaças" icon={<FuelIcon className="w-7 h-7 text-amber-400" />}>
       <div className="h-full flex flex-col">
           <form onSubmit={handleFormSubmit} className="space-y-4 mb-6 text-sm flex-shrink-0 p-4 bg-white/5 rounded-lg">
             <div className="grid grid-cols-2 gap-4">
-              <input type="text" placeholder="Nome da Barcaça" value={bargeForm.name} onChange={e => handleFormChange('name', e.target.value)} className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none col-span-1" required />
+              <input type="text" placeholder="Nome da Barcaça" value={bargeForm.name} onChange={e => handleFormChange('name', e.target.value)} className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none col-span-1" required />
                <div>
                   <label className="text-xs text-gray-300">Velocidade (nós)</label>
-                  <input type="number" placeholder="4" value={bargeForm.speed || ''} onChange={e => handleFormChange('speed', e.target.value)} className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none" />
+                  <input type="number" placeholder="4" value={bargeForm.speed || ''} onChange={e => handleFormChange('speed', e.target.value)} className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <label className="text-xs text-gray-300">Capacidade VLSFO (ton)</label>
-                    <input type="number" placeholder="0" value={bargeForm.vlsfoCapacity || ''} onChange={e => handleFormChange('vlsfoCapacity', e.target.value)} className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none" />
+                    <input type="number" placeholder="0" value={bargeForm.vlsfoCapacity || ''} onChange={e => handleFormChange('vlsfoCapacity', e.target.value)} className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none" />
                 </div>
                 <div>
                     <label className="text-xs text-gray-300">Capacidade MGO (ton)</label>
-                    <input type="number" placeholder="0" value={bargeForm.mgoCapacity || ''} onChange={e => handleFormChange('mgoCapacity', e.target.value)} className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none" />
+                    <input type="number" placeholder="0" value={bargeForm.mgoCapacity || ''} onChange={e => handleFormChange('mgoCapacity', e.target.value)} className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none" />
                 </div>
             </div>
             <div className="flex gap-2">
-                <button type="submit" className="flex-grow bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-300 flex items-center justify-center gap-2">
+                <button type="submit" className="flex-grow bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-300 flex items-center justify-center gap-2">
                     {editingBargeId ? <CheckIcon className="w-5 h-5"/> : <PlusIcon className="w-5 h-5" />}
                     {editingBargeId ? 'Salvar Alterações' : 'Adicionar Barcaça à Frota'}
                 </button>
@@ -177,20 +176,20 @@ const BargeSetup: React.FC<BargeSetupProps> = ({ barges, setBarges, setBargeStat
           </form>
            <div className="space-y-3 overflow-y-auto pr-2 flex-grow">
             {barges.map(barge => (
-              <div key={barge.id} className={`bg-white/5 p-3 rounded-lg text-sm flex justify-between items-center transition-all ${editingBargeId === barge.id ? 'ring-2 ring-yellow-500' : ''}`}>
+              <div key={barge.id} className={`bg-white/5 p-3 rounded-lg text-sm flex justify-between items-center transition-all ${editingBargeId === barge.id ? 'ring-2 ring-amber-500' : ''}`}>
                 <div>
                   <p className="font-bold text-gray-200">{barge.name}</p>
                   <div className="flex gap-2 mt-1 items-center">
                      {barge.products.map(p => (
-                        <span key={p.productType} className="text-xs font-normal bg-green-500/20 text-green-200 px-2 py-0.5 rounded-full">{p.productType}: {p.capacity}t</span>
+                        <span key={p.productType} className="text-xs font-normal bg-teal-500/20 text-teal-200 px-2 py-0.5 rounded-full">{p.productType}: {p.capacity}t</span>
                      ))}
-                     <span className="text-xs font-normal bg-yellow-500/20 text-yellow-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                     <span className="text-xs font-normal bg-amber-500/20 text-amber-200 px-2 py-0.5 rounded-full flex items-center gap-1">
                         <SpeedIcon className="w-3 h-3"/> {barge.speed} kn
                      </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <button onClick={() => startEditing(barge)} className="text-yellow-500 hover:text-yellow-400 p-1 rounded-full transition-colors"><PencilIcon className="w-4 h-4"/></button>
+                    <button onClick={() => startEditing(barge)} className="text-amber-500 hover:text-amber-400 p-1 rounded-full transition-colors"><PencilIcon className="w-4 h-4"/></button>
                     <button onClick={() => removeBarge(barge.id)} className="text-gray-500 hover:text-rose-400 p-1 rounded-full transition-colors"><TrashIcon className="w-5 h-5"/></button>
                 </div>
               </div>
@@ -235,7 +234,7 @@ const BargeInitialState: React.FC<BargeInitialStateProps> = ({ barges, bargeStat
     };
 
     return (
-        <Card title="Cenário inicial das Barcaças" icon={<ClockIcon className="w-7 h-7 text-yellow-400" />}>
+        <Card title="Cenário inicial das Barcaças" icon={<ClockIcon className="w-7 h-7 text-amber-400" />}>
             <div className="space-y-4 overflow-y-auto pr-2 h-full">
                  <div className="p-4 bg-white/5 rounded-lg">
                     <label htmlFor="simulation-start-time" className="text-sm text-gray-200 font-semibold mb-2 block">
@@ -246,7 +245,7 @@ const BargeInitialState: React.FC<BargeInitialStateProps> = ({ barges, bargeStat
                         type="datetime-local"
                         value={simulationStartTime}
                         onChange={e => setSimulationStartTime(e.target.value)}
-                        className="w-full bg-white/10 text-white p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                        className="w-full bg-white/10 text-white p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none"
                     />
                      <p className="text-xs text-gray-400 mt-2">Este é o ponto de partida para todos os cálculos de agendamento.</p>
                 </div>
@@ -273,7 +272,7 @@ const BargeInitialState: React.FC<BargeInitialStateProps> = ({ barges, bargeStat
                                           value={vol.volume} 
                                           max={maxCapacity}
                                           onChange={e => handleVolumeChange(barge.id, vol.productType, Math.min(parseInt(e.target.value, 10) || 0, maxCapacity))}
-                                          className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                                          className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none"
                                        />
                                      </div>
                                    )
@@ -284,7 +283,7 @@ const BargeInitialState: React.FC<BargeInitialStateProps> = ({ barges, bargeStat
                                 <select 
                                     value={state.locationId} 
                                     onChange={e => handleLocationChange(barge.id, e.target.value)}
-                                    className="w-full bg-white/10 text-white p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none disabled:opacity-50"
+                                    className="w-full bg-white/10 text-white p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none disabled:opacity-50"
                                     disabled={locations.length === 0}
                                 >
                                     {locations.length === 0 ? (
@@ -460,7 +459,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
              const editedVlsfoQty = editedRequest.products.find(p => p.productType === ProductType.VLSFO)?.quantity || 0;
              const editedMgoQty = editedRequest.products.find(p => p.productType === ProductType.MGO)?.quantity || 0;
             return (
-                <tr key={request.id} className="bg-green-900/30">
+                <tr key={request.id} className="bg-teal-900/30">
                     <td><input type="text" value={editedRequest.shipName} onChange={(e) => handleEditChange('shipName', e.target.value)} className="w-full bg-white/20 p-1 rounded border border-white/30" /></td>
                     <td>
                         <select value={editedRequest.locationId} onChange={(e) => handleEditChange('locationId', e.target.value)} className="w-full bg-white/20 p-1 rounded border border-white/30">
@@ -483,7 +482,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
                         </select>
                     </td>
                     <td className="flex items-center gap-2 p-1">
-                        <button onClick={saveEditing} className="text-green-400 hover:text-green-300 p-1"><CheckIcon className="w-5 h-5"/></button>
+                        <button onClick={saveEditing} className="text-teal-400 hover:text-teal-300 p-1"><CheckIcon className="w-5 h-5"/></button>
                         <button onClick={cancelEditing} className="text-rose-400 hover:text-rose-300 p-1"><TrashIcon className="w-5 h-5"/></button>
                     </td>
                 </tr>
@@ -502,14 +501,14 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
                 <td>
                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                         request.status === RequestStatus.InProgress
-                            ? 'bg-yellow-500/20 text-yellow-300'
-                            : 'bg-green-500/20 text-green-300'
+                            ? 'bg-amber-500/20 text-amber-300'
+                            : 'bg-teal-500/20 text-teal-300'
                     }`}>
                         {request.status}
                     </span>
                 </td>
                 <td className="flex items-center gap-2">
-                    <button onClick={() => startEditing(request)} className="text-yellow-400 hover:text-yellow-300 p-1"><PencilIcon className="w-4 h-4"/></button>
+                    <button onClick={() => startEditing(request)} className="text-amber-400 hover:text-amber-300 p-1"><PencilIcon className="w-4 h-4"/></button>
                     <button onClick={() => removeRequest(request.id)} className="text-gray-500 hover:text-rose-400 p-1"><TrashIcon className="w-4 h-4"/></button>
                 </td>
             </tr>
@@ -517,7 +516,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
     };
 
     return (
-        <Card title="Pedidos de Abastecimento" icon={<ShipIcon className="w-7 h-7 text-yellow-400" />}>
+        <Card title="Pedidos de Abastecimento" icon={<ShipIcon className="w-7 h-7 text-amber-400" />}>
             <div className="overflow-auto h-full">
                 <table ref={tableRef} className="w-full text-sm text-left text-gray-300" style={{tableLayout: 'fixed'}}>
                     <colgroup>
@@ -525,7 +524,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
                             <col key={header.key} style={{width: `${colWidths[header.key]}px`}} />
                         ))}
                     </colgroup>
-                    <thead className="text-xs text-yellow-400 uppercase bg-black/20 sticky top-0 z-10">
+                    <thead className="text-xs text-amber-400 uppercase bg-black/20 sticky top-0 z-10">
                         <tr>
                             {requestTableHeaders.map((header, index) => (
                                 <th key={header.key} className="px-4 py-3 select-none relative" style={{width: `${colWidths[header.key]}px`}}>
@@ -566,7 +565,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
                             </td>
                             <td className="p-2">
                                 <form onSubmit={handleAddRequest}>
-                                    <button type="submit" className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white p-2 rounded-md transition-colors"><PlusIcon className="w-5 h-5"/></button>
+                                    <button type="submit" className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white p-2 rounded-md transition-colors"><PlusIcon className="w-5 h-5"/></button>
                                 </form>
                             </td>
                         </tr>
@@ -688,20 +687,20 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
 
         if (item.shipName === 'TERMINAL') {
               return (
-                  <div key={`${item.scheduledTime}-${item.bargeName}-${index}`} className={`${baseClasses} ${view === 'list' ? `${listClasses} border-yellow-500` : `${kanbanClasses} border-yellow-500`}`}>
+                  <div key={`${item.scheduledTime}-${item.bargeName}-${index}`} className={`${baseClasses} ${view === 'list' ? `${listClasses} border-amber-500` : `${kanbanClasses} border-amber-500`}`}>
                     <div className="flex justify-between items-start">
                       <div>
                         <p className="font-bold text-lg text-white flex items-center gap-2">
-                            <TerminalIcon className="w-6 h-6 text-yellow-400" />
+                            <TerminalIcon className="w-6 h-6 text-amber-400" />
                             Para o Terminal
                         </p>
                         <p className="text-sm text-gray-400">Barcaça: <span className="font-semibold text-gray-300">{item.bargeName}</span></p>
                       </div>
                       <div className="text-right flex-shrink-0 ml-2">
-                          <span className="text-xs font-semibold bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full">Recarregar {item.product}</span>
+                          <span className="text-xs font-semibold bg-amber-500/20 text-amber-300 px-2 py-1 rounded-full">Recarregar {item.product}</span>
                       </div>
                     </div>
-                    <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2 text-yellow-300">
+                    <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2 text-amber-300">
                       <ClockIcon className="w-5 h-5"/>
                       <p className="text-sm font-medium">{formatDateTime(item.scheduledTime)}</p>
                     </div>
@@ -709,7 +708,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
               );
           }
           return (
-              <div key={`${item.scheduledTime}-${item.shipName}-${index}`} className={`${baseClasses} ${view === 'list' ? `${listClasses} border-green-500` : `${kanbanClasses} border-green-500`}`}>
+              <div key={`${item.scheduledTime}-${item.shipName}-${index}`} className={`${baseClasses} ${view === 'list' ? `${listClasses} border-teal-500` : `${kanbanClasses} border-teal-500`}`}>
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="font-bold text-lg text-white">{item.shipName}</p>
@@ -717,10 +716,10 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
                     <p className="text-sm text-gray-400 mt-1 flex items-center gap-1.5"><MapPinIcon className="w-4 h-4" /> {item.locationName}</p>
                   </div>
                   <div className="text-right flex-shrink-0 ml-2">
-                      <span className="text-xs font-semibold bg-green-500/20 text-green-300 px-2 py-1 rounded-full">{item.quantity}t {item.product}</span>
+                      <span className="text-xs font-semibold bg-teal-500/20 text-teal-300 px-2 py-1 rounded-full">{item.quantity}t {item.product}</span>
                   </div>
                 </div>
-                <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2 text-green-300">
+                <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2 text-teal-300">
                   <ClockIcon className="w-5 h-5"/>
                   <p className="text-sm font-medium">{formatDateTime(item.scheduledTime)}</p>
                 </div>
@@ -729,18 +728,18 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
     };
 
     return (
-      <Card title="Programação Gerada" icon={<CalendarIcon className="w-7 h-7 text-yellow-400" />}>
+      <Card title="Programação Gerada" icon={<CalendarIcon className="w-7 h-7 text-amber-400" />}>
         <div className="h-full flex flex-col">
             <div className="flex-shrink-0 mb-4 flex justify-end gap-2">
-                <button onClick={() => setViewMode('list')} className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${viewMode === 'list' ? 'bg-gradient-to-r from-green-500 to-yellow-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}>Lista</button>
-                <button onClick={() => setViewMode('kanban')} className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${viewMode === 'kanban' ? 'bg-gradient-to-r from-green-500 to-yellow-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}>Por Barcaça</button>
-                <button onClick={() => setViewMode('table')} className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${viewMode === 'table' ? 'bg-gradient-to-r from-green-500 to-yellow-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}>Tabela</button>
+                <button onClick={() => setViewMode('list')} className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${viewMode === 'list' ? 'bg-gradient-to-r from-teal-500 to-amber-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}>Lista</button>
+                <button onClick={() => setViewMode('kanban')} className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${viewMode === 'kanban' ? 'bg-gradient-to-r from-teal-500 to-amber-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}>Por Barcaça</button>
+                <button onClick={() => setViewMode('table')} className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${viewMode === 'table' ? 'bg-gradient-to-r from-teal-500 to-amber-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}>Tabela</button>
             </div>
             
             <div className="flex-grow overflow-auto pr-1">
                 {isLoading && (
                     <div className="flex flex-col items-center justify-center text-center p-8 h-full">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400"></div>
                         <p className="text-gray-300 mt-4">A IA está gerando a programação otimizada...</p>
                     </div>
                 )}
@@ -759,7 +758,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
                         <div className="flex gap-6 pb-4">
                             {Object.entries(scheduleByBarge).map(([bargeName, items]: [string, ScheduleItem[]]) => (
                                 <div key={bargeName} className="flex-shrink-0 w-80 bg-black/20 rounded-xl p-4">
-                                    <h3 className="font-bold text-lg text-yellow-400 mb-4 pb-2 border-b border-white/10">{bargeName}</h3>
+                                    <h3 className="font-bold text-lg text-amber-400 mb-4 pb-2 border-b border-white/10">{bargeName}</h3>
                                     <div className="space-y-4">
                                         {items.map((item, index) => renderScheduleItem(item, index, 'kanban'))}
                                     </div>
@@ -774,7 +773,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
                                         <col key={header.key} style={{width: `${scheduleColWidths[header.key]}px`}} />
                                     ))}
                                 </colgroup>
-                                <thead className="text-xs text-yellow-400 uppercase bg-black/20 sticky top-0 z-10">
+                                <thead className="text-xs text-amber-400 uppercase bg-black/20 sticky top-0 z-10">
                                     <tr>
                                        {scheduleTableHeaders.map((header, index) => (
                                             <th key={header.key} className="px-4 py-3 select-none relative" style={{width: `${scheduleColWidths[header.key]}px`}}>
@@ -796,8 +795,8 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
                                             <td className="px-4 py-2">{item.locationName}</td>
                                             <td className="px-4 py-2">{item.product}</td>
                                             <td className="px-4 py-2">{item.quantity}t</td>
-                                            <td className="px-4 py-2 text-green-300">{item.bargeName}</td>
-                                            <td className="px-4 py-2 text-green-300">{formatDateTime(item.scheduledTime)}</td>
+                                            <td className="px-4 py-2 text-teal-300">{item.bargeName}</td>
+                                            <td className="px-4 py-2 text-teal-300">{formatDateTime(item.scheduledTime)}</td>
                                             <td className="px-4 py-2">{formatDateTime(item.windowStart)}</td>
                                             <td className="px-4 py-2">{formatDateTime(item.windowEnd)}</td>
                                             <td className="px-4 py-2">{formatDate(item.contractualDate)}</td>
@@ -830,7 +829,7 @@ const OperationsHistory: React.FC<OperationsHistoryProps> = ({ history }) => {
     }, [history]);
 
     return (
-        <Card title="Histórico de Operações" icon={<HistoryIcon className="w-7 h-7 text-yellow-400" />}>
+        <Card title="Histórico de Operações" icon={<HistoryIcon className="w-7 h-7 text-amber-400" />}>
             <div className="space-y-6 overflow-y-auto pr-2 h-full">
                 {history.length === 0 && (
                     <div className="text-center text-gray-400 p-8">
@@ -849,7 +848,7 @@ const OperationsHistory: React.FC<OperationsHistoryProps> = ({ history }) => {
                                     <div className="flex justify-between items-start">
                                         <div>
                                             <p className="text-gray-300">
-                                                <span className="font-semibold text-green-400">{item.quantity}t {item.product}</span> via {item.bargeName}
+                                                <span className="font-semibold text-teal-400">{item.quantity}t {item.product}</span> via {item.bargeName}
                                             </p>
                                         </div>
                                         <p className="text-xs text-gray-400">{formatDateTime(item.completionTime)}</p>
@@ -901,7 +900,7 @@ const PrioritiesSetup: React.FC<PrioritiesSetupProps> = ({ priorities, setPriori
     };
 
     return (
-        <Card title="Prioridades de Agendamento" icon={<CalendarIcon className="w-7 h-7 text-yellow-400" />}>
+        <Card title="Prioridades de Agendamento" icon={<CalendarIcon className="w-7 h-7 text-amber-400" />}>
             <div className="h-full flex flex-col">
                 <p className="text-sm text-gray-400 mb-4">Arraste e solte para reordenar as prioridades. A IA seguirá esta ordem ao criar a programação.</p>
                 <form onSubmit={handleAddPriority} className="flex gap-2 mb-4">
@@ -910,9 +909,9 @@ const PrioritiesSetup: React.FC<PrioritiesSetupProps> = ({ priorities, setPriori
                         value={newPriorityText}
                         onChange={(e) => setNewPriorityText(e.target.value)}
                         placeholder="Adicionar nova regra de prioridade"
-                        className="flex-grow bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                        className="flex-grow bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none"
                     />
-                    <button type="submit" className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold p-2 rounded-md transition-colors"><PlusIcon className="w-5 h-5"/></button>
+                    <button type="submit" className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold p-2 rounded-md transition-colors"><PlusIcon className="w-5 h-5"/></button>
                 </form>
 
                 <div className="space-y-2 overflow-y-auto pr-2 flex-grow">
@@ -993,7 +992,7 @@ const LocationSetup: React.FC<LocationSetupProps> = ({ locations, setLocations }
     };
 
     return (
-        <Card title="Locais de Abastecimento" icon={<MapPinIcon className="w-7 h-7 text-yellow-400" />}>
+        <Card title="Locais de Abastecimento" icon={<MapPinIcon className="w-7 h-7 text-amber-400" />}>
             <div className="h-full flex flex-col">
                 <p className="text-sm text-gray-400 mb-4">Defina os locais possíveis onde os navios podem ser abastecidos.</p>
                 <form onSubmit={handleFormSubmit} className="space-y-3 mb-6 p-4 bg-white/5 rounded-lg">
@@ -1002,7 +1001,7 @@ const LocationSetup: React.FC<LocationSetupProps> = ({ locations, setLocations }
                         value={locationForm.name}
                         onChange={(e) => handleFormChange('name', e.target.value)}
                         placeholder="Nome do Local (ex: Píer 7)"
-                        className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none disabled:bg-gray-600"
+                        className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none disabled:bg-gray-600"
                         disabled={editingLocationId ? locations.find(l => l.id === editingLocationId)?.name === 'TERMINAL' : false}
                     />
                     <div className="grid grid-cols-2 gap-4">
@@ -1012,7 +1011,7 @@ const LocationSetup: React.FC<LocationSetupProps> = ({ locations, setLocations }
                             value={locationForm.latitude || ''}
                             onChange={(e) => handleFormChange('latitude', parseFloat(e.target.value) || 0)}
                             placeholder="Latitude"
-                            className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                            className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none"
                         />
                          <input
                             type="number"
@@ -1020,11 +1019,11 @@ const LocationSetup: React.FC<LocationSetupProps> = ({ locations, setLocations }
                             value={locationForm.longitude || ''}
                             onChange={(e) => handleFormChange('longitude', parseFloat(e.target.value) || 0)}
                             placeholder="Longitude"
-                            className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                            className="w-full bg-white/10 text-white placeholder-gray-400 p-2 rounded-md border border-white/20 focus:ring-2 focus:ring-amber-500 focus:outline-none"
                         />
                     </div>
                     <div className="flex gap-2">
-                        <button type="submit" className="flex-grow bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold p-2 rounded-md transition-colors flex items-center justify-center gap-2">
+                        <button type="submit" className="flex-grow bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold p-2 rounded-md transition-colors flex items-center justify-center gap-2">
                             {editingLocationId ? <CheckIcon className="w-5 h-5"/> : <PlusIcon className="w-5 h-5"/>}
                             {editingLocationId ? 'Salvar Alterações' : 'Adicionar Local'}
                         </button>
@@ -1041,7 +1040,7 @@ const LocationSetup: React.FC<LocationSetupProps> = ({ locations, setLocations }
                                 <p className="text-gray-200 font-semibold">{location.name}</p>
                                 {location.name === 'TERMINAL' && (
                                     <div className="relative group">
-                                        <InfoIcon className="w-4 h-4 text-yellow-400 cursor-help" />
+                                        <InfoIcon className="w-4 h-4 text-amber-400 cursor-help" />
                                         <div className="absolute top-full left-0 mt-2 w-max max-w-xs p-2 text-xs text-white bg-gray-800 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
                                             Para a localidade TERMINAL, indicar as coordenadas do Píer de Barcaças.
                                         </div>
@@ -1055,7 +1054,7 @@ const LocationSetup: React.FC<LocationSetupProps> = ({ locations, setLocations }
                             </div>
 
                             <div className="flex items-center gap-2">
-                                <button onClick={() => startEditing(location)} className="text-yellow-500 hover:text-yellow-400 p-1"><PencilIcon className="w-4 h-4"/></button>
+                                <button onClick={() => startEditing(location)} className="text-amber-500 hover:text-amber-400 p-1"><PencilIcon className="w-4 h-4"/></button>
                                 {location.name !== 'TERMINAL' && (
                                      <button onClick={() => handleDeleteLocation(location.id)} className="text-gray-500 hover:text-rose-400 p-1"><TrashIcon className="w-4 h-4" /></button>
                                 )}
@@ -1078,7 +1077,7 @@ interface MapViewProps {
 
 const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, schedule }) => {
     // This key is now read from environment variables for security.
-    const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+    const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
     const [selectedBargeId, setSelectedBargeId] = useState<string | null>(null);
 
@@ -1132,7 +1131,7 @@ const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, sched
 
     if (locations.length === 0) {
       return (
-        <Card title="Visualização no Mapa" icon={<MapIcon className="w-7 h-7 text-yellow-400" />}>
+        <Card title="Visualização no Mapa" icon={<MapIcon className="w-7 h-7 text-amber-400" />}>
            <div className="flex items-center justify-center h-full text-gray-400">
              <p>Adicione locais para ver a visualização no mapa.</p>
            </div>
@@ -1142,9 +1141,9 @@ const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, sched
     
     if (!GOOGLE_MAPS_API_KEY) {
       return (
-        <Card title="Visualização no Mapa" icon={<MapIcon className="w-7 h-7 text-yellow-400" />}>
-           <div className="flex items-center justify-center h-full text-center text-yellow-300 p-4">
-             <p>Para habilitar o mapa, adicione a variável de ambiente `GOOGLE_MAPS_API_KEY` nas configurações de deploy do seu projeto (ex: Vercel).</p>
+        <Card title="Visualização no Mapa" icon={<MapIcon className="w-7 h-7 text-amber-400" />}>
+           <div className="flex items-center justify-center h-full text-center text-amber-300 p-4">
+             <p>Para habilitar o mapa, adicione a variável de ambiente `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` nas configurações de deploy do seu projeto (ex: Vercel).</p>
            </div>
         </Card>
       )
@@ -1153,14 +1152,14 @@ const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, sched
     const scheduledBarges = barges.filter(barge => schedule.some(item => item.bargeName === barge.name));
 
     return (
-        <Card title="Visualização no Mapa" icon={<MapIcon className="w-7 h-7 text-yellow-400" />}>
+        <Card title="Visualização no Mapa" icon={<MapIcon className="w-7 h-7 text-amber-400" />}>
           <div className="flex flex-col w-full h-full bg-black/20 rounded-lg overflow-hidden">
             <div className="p-2 bg-black/30 flex-shrink-0">
                 <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-sm font-semibold mr-2">Mostrar Rota para:</p>
                     <button 
                         onClick={() => setSelectedBargeId(null)}
-                        className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${!selectedBargeId ? 'bg-gradient-to-r from-green-500 to-yellow-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}
+                        className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${!selectedBargeId ? 'bg-gradient-to-r from-teal-500 to-amber-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}
                     >
                         Mostrar Todos os Locais
                     </button>
@@ -1168,7 +1167,7 @@ const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, sched
                          <button 
                             key={barge.id}
                             onClick={() => setSelectedBargeId(barge.id)}
-                            className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${selectedBargeId === barge.id ? 'bg-gradient-to-r from-green-500 to-yellow-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}
+                            className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${selectedBargeId === barge.id ? 'bg-gradient-to-r from-teal-500 to-amber-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-300'}`}
                         >
                             {barge.name}
                         </button>
@@ -1202,7 +1201,7 @@ const TabButton: React.FC<TabButtonProps> = ({ isActive, onClick, children }) =>
         onClick={onClick}
         className={`px-4 py-2 text-base font-semibold rounded-t-lg transition-colors duration-300 focus:outline-none ${
             isActive
-                ? 'bg-black/10 border-b-2 border-yellow-500 text-yellow-400'
+                ? 'bg-black/10 border-b-2 border-amber-500 text-amber-400'
                 : 'text-gray-300 hover:text-white'
         }`}
     >
@@ -1221,9 +1220,9 @@ const ProgbunkerLogo = () => (
   >
     <defs>
       <linearGradient id="logoGradient" x1="0%" y1="50%" x2="100%" y2="50%">
-        <stop offset="0%" stopColor="#4ade80" />
-        <stop offset="50%" stopColor="#fde047" />
-        <stop offset="100%" stopColor="#facc15" />
+        <stop offset="0%" stopColor="#14b8a6" />
+        <stop offset="50%" stopColor="#fcd34d" />
+        <stop offset="100%" stopColor="#fbbf24" />
       </linearGradient>
     </defs>
     
@@ -1578,14 +1577,14 @@ export default function App() {
               <button
                   onClick={handleGenerateSchedule}
                   disabled={isLoading || barges.length === 0 || requestsToSchedule.length === 0}
-                  className="bg-gradient-to-r from-green-500 to-yellow-500 hover:from-green-600 hover:to-yellow-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                  className="bg-gradient-to-r from-teal-500 to-amber-500 hover:from-teal-600 hover:to-amber-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
               >
                   {isLoading ? 'Gerando...' : 'Gerar Programação'}
               </button>
               <button
                   onClick={handleCommitSchedule}
                   disabled={isLoading || schedule.length === 0}
-                  className="bg-yellow-700 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                  className="bg-amber-700 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
               >
                   Confirmar no Histórico
               </button>
@@ -1602,7 +1601,7 @@ export default function App() {
                 </button>
             </div>
             <div className="h-4">
-             {feedbackMessage && <p className="text-sm text-green-400">{feedbackMessage}</p>}
+             {feedbackMessage && <p className="text-sm text-teal-400">{feedbackMessage}</p>}
             </div>
         </footer>
       </div>
