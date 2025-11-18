@@ -1,6 +1,3 @@
-
-
-// FIX: Corrected the import statement for React and its hooks.
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import type { Barge, RefuelingRequest, ScheduleItem, BargeState, ProductDetail, BargeProduct, BargeVolume, OperationHistoryItem, Priority, Location } from './types';
 import { ProductType, RequestStatus } from './types';
@@ -313,7 +310,6 @@ interface RequestsTableProps {
   locations: Location[];
 }
 
-// FIX: Define a type for column widths for type safety in resizing logic
 type RequestColWidths = {
     shipName: number;
     location: number;
@@ -393,6 +389,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
     ] as const, []);
 
     useEffect(() => {
+      // This effect corrects the location ID in the 'new request' form if the currently selected one is no longer valid
       if (!serviceableLocations.some(l => l.id === newRequest.locationId)) {
         setNewRequest(prev => ({...prev, locationId: serviceableLocations[0]?.id || ''}))
       }
@@ -485,7 +482,7 @@ const RequestsTable: React.FC<RequestsTableProps> = ({ requests, setRequests, lo
                     </td>
                     <td className="flex items-center gap-2 p-1">
                         <button onClick={saveEditing} className="text-teal-400 hover:text-teal-300 p-1"><CheckIcon className="w-5 h-5"/></button>
-                        <button onClick={cancelEditing} className="text-rose-400 hover:text-rose-300 p-1"><TrashIcon className="w-5 h-5"/></button>
+                        <button onClick={cancelEditing} className="text-rose-400 hover:text-rose-300 p-1"><XIcon className="w-5 h-5"/></button>
                     </td>
                 </tr>
             );
@@ -586,7 +583,6 @@ interface ScheduleViewProps {
   requests: RefuelingRequest[];
 }
 
-// FIX: Define a type for schedule column widths for type safety in resizing logic
 type ScheduleColWidths = {
     shipName: number;
     locationName: number;
@@ -674,11 +670,11 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
         { key: 'locationName', label: 'Local' },
         { key: 'product', label: 'Produto' },
         { key: 'quantity', label: 'Quantidade' },
-        { key: 'bargeName', label: 'Barcaça Designada' },
-        { key: 'scheduledTime', label: 'Horário Agendado' },
         { key: 'windowStart', label: 'Início da Janela' },
         { key: 'windowEnd', label: 'Fim da Janela' },
         { key: 'contractualDate', label: 'Data Contratual' },
+        { key: 'bargeName', label: 'Barcaça Designada' },
+        { key: 'scheduledTime', label: 'Horário Agendado' },
     ] as const, []);
 
 
@@ -792,16 +788,16 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
                                 </thead>
                                 <tbody className="divide-y divide-white/10">
                                     {scheduleTableData.map((item, index) => (
-                                        <tr key={index} className="hover:bg-white/5 transition-colors">
+                                        <tr key={`${item.bargeName}-${item.shipName}-${item.scheduledTime}-${index}`} className="hover:bg-white/5 transition-colors">
                                             <td className="px-4 py-2 font-semibold text-gray-200">{item.shipName}</td>
                                             <td className="px-4 py-2">{item.locationName}</td>
                                             <td className="px-4 py-2">{item.product}</td>
                                             <td className="px-4 py-2">{item.quantity}t</td>
-                                            <td className="px-4 py-2 text-teal-300">{item.bargeName}</td>
-                                            <td className="px-4 py-2 text-teal-300">{formatDateTime(item.scheduledTime)}</td>
                                             <td className="px-4 py-2">{formatDateTime(item.windowStart)}</td>
                                             <td className="px-4 py-2">{formatDateTime(item.windowEnd)}</td>
                                             <td className="px-4 py-2">{formatDate(item.contractualDate)}</td>
+                                            <td className="px-4 py-2 text-teal-300">{item.bargeName}</td>
+                                            <td className="px-4 py-2 text-teal-300">{formatDateTime(item.scheduledTime)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -996,7 +992,7 @@ const LocationSetup: React.FC<LocationSetupProps> = ({ locations, setLocations }
     return (
         <Card title="Locais de Abastecimento" icon={<MapPinIcon className="w-7 h-7 text-amber-400" />}>
             <div className="h-full flex flex-col">
-                <p className="text-sm text-gray-400 mb-4">Defina os locais possíveis onde os navios podem ser abastecidos.</p>
+                <p className="text-sm text-gray-400 mb-4">Defina os locais onde os navios podem ser abastecidos.</p>
                 <form onSubmit={handleFormSubmit} className="space-y-3 mb-6 p-4 bg-white/5 rounded-lg">
                     <input
                         type="text"
@@ -1037,8 +1033,11 @@ const LocationSetup: React.FC<LocationSetupProps> = ({ locations, setLocations }
 
                 <div className="space-y-2 overflow-y-auto pr-2 flex-grow">
                     {locations.map((location) => (
-                        <div key={location.id} className="flex items-center justify-between bg-white/5 p-3 rounded-lg text-sm">
-                            <div className="flex items-center gap-2">
+                        <div 
+                            key={location.id} 
+                            className="flex items-center justify-between bg-white/5 p-3 rounded-lg text-sm"
+                        >
+                            <div className="flex items-center gap-3">
                                 <p className="text-gray-200 font-semibold">{location.name}</p>
                                 {location.name === 'TERMINAL' && (
                                     <div className="relative group">
@@ -1078,10 +1077,24 @@ interface MapViewProps {
 }
 
 const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, schedule }) => {
-    // This key is now read from environment variables for security.
     const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
-
     const [selectedBargeId, setSelectedBargeId] = useState<string | null>(null);
+
+    // This effect ensures that if the selected barge is removed or is no longer in the generated schedule,
+    // the selection is cleared to prevent errors.
+    useEffect(() => {
+        if (selectedBargeId) {
+            const bargeExists = barges.some(b => b.id === selectedBargeId);
+            const bargeIsInSchedule = schedule.some(item => {
+                const barge = barges.find(b => b.id === selectedBargeId);
+                return barge && item.bargeName === barge.name;
+            });
+
+            if (!bargeExists || !bargeIsInSchedule) {
+                setSelectedBargeId(null);
+            }
+        }
+    }, [barges, schedule, selectedBargeId]);
 
     const googleMapsUrl = useMemo(() => {
         if (!GOOGLE_MAPS_API_KEY) {
@@ -1089,32 +1102,28 @@ const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, sched
         }
         const baseUrl = 'https://www.google.com/maps/embed/v1/';
         
-        // Find barges that actually have a schedule
-        const scheduledBargeNames = new Set(schedule.map(item => item.bargeName));
-
-        if (selectedBargeId && scheduledBargeNames.size > 0) {
+        if (selectedBargeId) {
             const selectedBarge = barges.find(b => b.id === selectedBargeId);
-            if (!selectedBarge) {
-                setSelectedBargeId(null);
-                return ''; // barge not found, reset
-            }
+            // Due to the useEffect above, we can be more confident that selectedBarge exists
+            // and is in the schedule. A check is still good practice.
+            if (selectedBarge) {
+                const bargeSchedule = schedule.filter(item => item.bargeName === selectedBarge.name);
+                const initialState = bargeStates.find(bs => bs.bargeId === selectedBarge.id);
+                const startLocation = locations.find(l => l.id === initialState?.locationId);
 
-            const bargeSchedule = schedule.filter(item => item.bargeName === selectedBarge.name);
-            const initialState = bargeStates.find(bs => bs.bargeId === selectedBarge.id);
-            const startLocation = locations.find(l => l.id === initialState?.locationId);
+                if (bargeSchedule.length > 0 && startLocation) {
+                    const waypoints = bargeSchedule.map(item => {
+                        const loc = locations.find(l => l.name === item.locationName);
+                        return loc ? `${loc.latitude},${loc.longitude}` : '';
+                    }).filter(Boolean);
+                    
+                    if (waypoints.length > 0) {
+                        const origin = `${startLocation.latitude},${startLocation.longitude}`;
+                        const destination = waypoints[waypoints.length - 1];
+                        const waypointsString = waypoints.slice(0, -1).join('|');
 
-            if (bargeSchedule.length > 0 && startLocation) {
-                const waypoints = bargeSchedule.map(item => {
-                    const loc = locations.find(l => l.name === item.locationName);
-                    return loc ? `${loc.latitude},${loc.longitude}` : '';
-                }).filter(Boolean);
-                
-                if (waypoints.length > 0) {
-                    const origin = `${startLocation.latitude},${startLocation.longitude}`;
-                    const destination = waypoints[waypoints.length - 1];
-                    const waypointsString = waypoints.slice(0, -1).join('|');
-
-                    return `${baseUrl}directions?key=${GOOGLE_MAPS_API_KEY}&origin=${origin}&destination=${destination}&waypoints=${waypointsString}&maptype=satellite`;
+                        return `${baseUrl}directions?key=${GOOGLE_MAPS_API_KEY}&origin=${origin}&destination=${destination}&waypoints=${waypointsString}&maptype=satellite`;
+                    }
                 }
             }
         }
@@ -1146,7 +1155,7 @@ const MapView: React.FC<MapViewProps> = ({ barges, bargeStates, locations, sched
         <Card title="Visualização no Mapa" icon={<MapIcon className="w-7 h-7 text-amber-400" />}>
            <div className="flex items-center justify-center h-full text-center text-amber-300 p-4">
              <p className="font-bold">CONFIGURAÇÃO NECESSÁRIA:</p>
-             <p className="text-sm mt-2">A variável de ambiente 'GOOGLE_MAPS_API_KEY' não foi encontrada. PARA CORRIGIR: 1) Acesse as configurações do seu projeto na Vercel. 2) Adicione uma Environment Variable com o nome exato 'GOOGLE_MAPS_API_KEY'. 3) CERTIFIQUE-SE DE MARCAR TODAS AS CAIXAS de ambiente (Production, Preview, Development). 4) Faça o REDEPLOY da aplicação.</p>
+             <p className="text-sm mt-2">A chave de API do Google Maps não foi encontrada. Por favor, configure a variável de ambiente 'GOOGLE_MAPS_API_KEY' para usar o mapa.</p>
            </div>
         </Card>
       )
@@ -1250,7 +1259,7 @@ const ProgbunkerLogo = () => (
 
 
 // --- Main App Component ---
-type TabName = 'setup' | 'state' | 'scheduling' | 'pedidos' | 'history' | 'priorities' | 'locations' | 'map';
+type TabName = 'setup' | 'state' | 'scheduling' | 'history' | 'priorities' | 'locations' | 'map';
 
 const defaultPriorities: Priority[] = [
   { id: 'p1', text: "Data Contratual: Priorizar o atendimento de navios em sua 'dataContratual'." },
@@ -1287,23 +1296,17 @@ interface AppState {
     priorities: Priority[];
     operationHistory: OperationHistoryItem[];
     simulationStartTime?: string;
-    tabOrder?: TabName[];
 }
 
 const LOCAL_STORAGE_KEY = 'bargeSchedulerConfig_v3'; // Incremented version to avoid conflicts
-const initialTabOrder: TabName[] = ['scheduling', 'pedidos', 'state', 'setup', 'locations', 'map', 'priorities', 'history'];
+const initialTabOrder: TabName[] = ['scheduling', 'state', 'setup', 'locations', 'map', 'priorities', 'history'];
 
 // Function to load the application state from localStorage
 const loadInitialState = (): AppState | null => {
     try {
         const savedStateJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (savedStateJSON) {
-            const state = JSON.parse(savedStateJSON) as AppState;
-            // Provide default tabOrder if not present or mismatched
-            if (!state.tabOrder || state.tabOrder.length !== initialTabOrder.length) {
-                state.tabOrder = initialTabOrder;
-            }
-            return state;
+            return JSON.parse(savedStateJSON) as AppState;
         }
     } catch (error) {
         console.error("Could not load state from localStorage on init", error);
@@ -1322,7 +1325,6 @@ export default function App() {
   const [requests, setRequests] = useState<RefuelingRequest[]>(initialState?.requests || defaultRequests);
   const [operationHistory, setOperationHistory] = useState<OperationHistoryItem[]>(initialState?.operationHistory || []);
   const [priorities, setPriorities] = useState<Priority[]>(initialState?.priorities || defaultPriorities);
-  const [tabOrder, setTabOrder] = useState<TabName[]>(initialState?.tabOrder || initialTabOrder);
   const [simulationStartTime, setSimulationStartTime] = useState<string>(initialState?.simulationStartTime || (() => {
     const now = new Date();
     // Adjust for timezone offset to show local time in the input
@@ -1333,12 +1335,9 @@ export default function App() {
   const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<TabName>(tabOrder[0] || 'setup');
+  const [activeTab, setActiveTab] = useState<TabName>(initialTabOrder[0]);
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
-  const draggedTab = useRef<TabName | null>(null);
-  const dragOverTab = useRef<TabName | null>(null);
-  
   // Auto-save state to localStorage on any change
   useEffect(() => {
     // Skip saving on the initial render to avoid overwriting state before it's fully loaded
@@ -1355,14 +1354,13 @@ export default function App() {
             priorities,
             operationHistory,
             simulationStartTime,
-            tabOrder,
         };
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(appState));
     } catch (err) {
         console.error("Failed to auto-save state to localStorage", err);
         setError("Erro: Não foi possível salvar a configuração automaticamente. Suas alterações podem não ser mantidas.");
     }
-  }, [barges, bargeStates, requests, locations, priorities, operationHistory, simulationStartTime, tabOrder]);
+  }, [barges, bargeStates, requests, locations, priorities, operationHistory, simulationStartTime]);
 
 
   const bargesForPrompt = useMemo((): BargeForPrompt[] => {
@@ -1481,7 +1479,6 @@ export default function App() {
         setLocations(defaultLocations);
         setPriorities(defaultPriorities);
         setOperationHistory([]);
-        setTabOrder(initialTabOrder);
         setSimulationStartTime(() => {
             const now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -1494,26 +1491,11 @@ export default function App() {
     }
   }, []);
 
-  const handleTabDragEnd = () => {
-    if (draggedTab.current && dragOverTab.current && draggedTab.current !== dragOverTab.current) {
-        const currentTabOrder = [...tabOrder];
-        const draggedIndex = currentTabOrder.indexOf(draggedTab.current);
-        const targetIndex = currentTabOrder.indexOf(dragOverTab.current);
-
-        const [draggedItem] = currentTabOrder.splice(draggedIndex, 1);
-        currentTabOrder.splice(targetIndex, 0, draggedItem);
-        setTabOrder(currentTabOrder);
-    }
-    draggedTab.current = null;
-    dragOverTab.current = null;
-  };
-
   const tabLabels: Record<TabName, string> = {
     setup: 'Frota',
     state: 'Cenário inicial',
     locations: 'Locais',
     scheduling: 'Programação',
-    pedidos: 'Pedidos',
     map: 'Mapa',
     priorities: 'Prioridades',
     history: 'Publicação'
@@ -1528,9 +1510,16 @@ export default function App() {
       case 'locations':
         return <LocationSetup locations={locations} setLocations={setLocations} />;
       case 'scheduling':
-        return <ScheduleView schedule={schedule} isLoading={isLoading} requests={requests} />;
-      case 'pedidos':
-        return <RequestsTable requests={requests} setRequests={setRequests} locations={locations} />;
+         return (
+            <div className="grid grid-rows-2 gap-6 h-full overflow-hidden">
+                <div className="row-span-1 overflow-hidden">
+                   <RequestsTable requests={requests} setRequests={setRequests} locations={locations} />
+                </div>
+                <div className="row-span-1 overflow-hidden">
+                   <ScheduleView schedule={schedule} isLoading={isLoading} requests={requests} />
+                </div>
+            </div>
+         );
       case 'map':
         return <MapView barges={barges} bargeStates={bargeStates} locations={locations} schedule={schedule} />;
       case 'history':
@@ -1552,25 +1541,15 @@ export default function App() {
 
         <div className="border-b border-white/10 mb-6">
             <div className="flex space-x-2 flex-wrap">
-                {tabOrder.map(tabKey => (
-                     <div
-                        key={tabKey}
-                        draggable
-                        onDragStart={() => (draggedTab.current = tabKey)}
-                        onDragEnter={() => (dragOverTab.current = tabKey)}
-                        onDragEnd={handleTabDragEnd}
-                        onDragOver={(e) => e.preventDefault()}
-                        className="cursor-move"
-                    >
-                        <TabButton isActive={activeTab === tabKey} onClick={() => setActiveTab(tabKey)}>
-                            {tabLabels[tabKey]}
-                        </TabButton>
-                    </div>
+                {initialTabOrder.map(tabKey => (
+                     <TabButton key={tabKey} isActive={activeTab === tabKey} onClick={() => setActiveTab(tabKey)}>
+                        {tabLabels[tabKey]}
+                    </TabButton>
                 ))}
             </div>
         </div>
 
-        <main className="flex-grow flex flex-col">
+        <main className="flex-grow flex flex-col overflow-hidden">
             {renderTabContent()}
         </main>
         

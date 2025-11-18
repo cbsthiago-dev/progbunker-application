@@ -63,7 +63,7 @@ export const generateSchedule = async (barges: BargeForPrompt[], requests: Reque
 
   if (!API_key) {
     console.error("API_KEY environment variable not set");
-    throw new Error("CONFIGURAÇÃO NECESSÁRIA: A variável de ambiente 'API_KEY' não foi encontrada. PARA CORRIGIR: 1) Acesse as configurações do seu projeto na Vercel. 2) Adicione uma Environment Variable com o nome exato 'API_KEY'. 3) CERTIFIQUE-SE DE MARCAR TODAS AS CAIXAS de ambiente (Production, Preview, Development). 4) Faça o REDEPLOY da aplicação.");
+    throw new Error("CONFIGURAÇÃO NECESSÁRIA: A chave de API do Gemini não foi encontrada. Por favor, configure a variável de ambiente 'API_KEY' para continuar.");
   }
 
   const ai = new GoogleGenAI({ apiKey: API_key });
