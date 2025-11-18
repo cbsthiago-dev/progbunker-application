@@ -1,10 +1,12 @@
+
+
 // FIX: Corrected the import statement for React and its hooks.
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import type { Barge, RefuelingRequest, ScheduleItem, BargeState, ProductDetail, BargeProduct, BargeVolume, OperationHistoryItem, Priority, Location } from './types';
 import { ProductType, RequestStatus } from './types';
 import { generateSchedule } from './services/geminiService';
 import type { BargeForPrompt, RequestForPrompt } from './services/geminiService';
-import { ShipIcon, FuelIcon, CalendarIcon, ClockIcon, TrashIcon, PlusIcon, HistoryIcon, TerminalIcon, PencilIcon, CheckIcon, GripVerticalIcon, MapPinIcon, SpeedIcon, SaveIcon, LoadIcon, MapIcon, InfoIcon } from './components/IconComponents';
+import { ShipIcon, FuelIcon, CalendarIcon, ClockIcon, TrashIcon, PlusIcon, PublishIcon, TerminalIcon, PencilIcon, CheckIcon, GripVerticalIcon, MapPinIcon, SpeedIcon, SaveIcon, LoadIcon, MapIcon, InfoIcon, XIcon } from './components/IconComponents';
 
 // --- Helper Functions ---
 const formatDateTime = (isoString: string) => {
@@ -746,7 +748,7 @@ const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, isLoading, reques
                 {!isLoading && schedule.length === 0 && (
                     <div className="text-center text-gray-400 p-8 h-full flex flex-col justify-center items-center">
                         <p>A programação aparecerá aqui após ser gerada.</p>
-                        <p className="text-sm mt-2">Adicione barcaças e pedidos, depois clique em "Gerar Programação".</p>
+                        <p className="text-sm mt-2">Adicione Pedidos e um Cenário Inicial, depois clique em "Gerar Programação".</p>
                     </div>
                 )}
                 {!isLoading && schedule.length > 0 && (
@@ -829,12 +831,12 @@ const OperationsHistory: React.FC<OperationsHistoryProps> = ({ history }) => {
     }, [history]);
 
     return (
-        <Card title="Histórico de Operações" icon={<HistoryIcon className="w-7 h-7 text-amber-400" />}>
+        <Card title="Publicações" icon={<PublishIcon className="w-7 h-7 text-amber-400" />}>
             <div className="space-y-6 overflow-y-auto pr-2 h-full">
                 {history.length === 0 && (
                     <div className="text-center text-gray-400 p-8">
-                        <p>Nenhuma operação foi registrada ainda.</p>
-                        <p className="text-sm mt-2">Gere uma programação e confirme-a para ver o histórico aqui.</p>
+                        <p>Nenhuma operação foi publicada ainda.</p>
+                        <p className="text-sm mt-2">Gere uma programação e publique-a para ver as publicações aqui.</p>
                     </div>
                 )}
                 {Object.entries(groupedHistory).map(([shipName, items]: [string, OperationHistoryItem[]]) => (
@@ -1514,7 +1516,7 @@ export default function App() {
     pedidos: 'Pedidos',
     map: 'Mapa',
     priorities: 'Prioridades',
-    history: 'Histórico'
+    history: 'Publicação'
   };
 
   const renderTabContent = () => {
@@ -1568,28 +1570,39 @@ export default function App() {
             </div>
         </div>
 
-        <main className="flex-grow min-h-[500px]">
+        <main className="flex-grow flex flex-col">
             {renderTabContent()}
         </main>
         
-        <footer className="mt-8 text-center space-y-4 flex-shrink-0">
+        <footer className="pt-8 text-center space-y-4 flex-shrink-0">
             {error && <p className="text-rose-400 bg-rose-900/50 p-3 rounded-md">{error}</p>}
-            <div className="flex justify-center items-center gap-4">
-              <button
-                  onClick={handleGenerateSchedule}
-                  disabled={isLoading || barges.length === 0 || requestsToSchedule.length === 0}
-                  className="bg-gradient-to-r from-teal-500 to-amber-500 hover:from-teal-600 hover:to-amber-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
-              >
-                  {isLoading ? 'Gerando...' : 'Gerar Programação'}
-              </button>
-              <button
-                  onClick={handleCommitSchedule}
-                  disabled={isLoading || schedule.length === 0}
-                  className="bg-amber-700 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
-              >
-                  Confirmar no Histórico
-              </button>
-            </div>
+            {activeTab === 'scheduling' && (
+              <div className="flex justify-center items-center gap-4">
+                <button
+                    onClick={handleGenerateSchedule}
+                    disabled={isLoading || barges.length === 0 || requestsToSchedule.length === 0}
+                    className="bg-gradient-to-r from-teal-500 to-amber-500 hover:from-teal-600 hover:to-amber-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                >
+                    {isLoading ? 'Gerando...' : 'Gerar Programação'}
+                </button>
+                <button
+                    onClick={handleCommitSchedule}
+                    disabled={isLoading || schedule.length === 0}
+                    className="bg-amber-700 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                >
+                    Publicar
+                </button>
+                 <button
+                    onClick={() => setSchedule([])}
+                    disabled={isLoading || schedule.length === 0}
+                    title="Limpar Programação Gerada"
+                    className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 flex items-center gap-2"
+                >
+                    <XIcon className="w-5 h-5" />
+                    Limpar
+                </button>
+              </div>
+            )}
             <div className="flex justify-center items-center gap-4 mt-4 pt-4 border-t border-white/10">
                 <p className="text-sm text-gray-400">
                     Sua configuração é salva automaticamente.
